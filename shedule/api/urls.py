@@ -1,7 +1,7 @@
 from django.urls import path
 from . import views
 
-urlpatterns  = [
-    path('', views.getRoutes, name="routes"),
-  
+urlpatterns = [
+    path('busroutes/', views.getRoutes, name="routes"),
+    path('busroutes/<str:pk>/', views.getChild, name="busrout")
 ]
