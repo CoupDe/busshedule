@@ -81,7 +81,7 @@ WSGI_APPLICATION = 'shedule.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'busshedule',
+        'NAME': 'shedulebus',
         'USER': 'coup',
         'PASSWORD': 'C0l0ssok',
         'HOST': '127.0.0.1',
