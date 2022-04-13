@@ -1,11 +1,15 @@
+from distutils.log import error
+import string
+from urllib import response
 from django.shortcuts import render
 from django.http import JsonResponse
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
+from rest_framework import status
+from .models import Driver, RouteNumber
+from .customExceptions import RouteUniqExeption
 
-from .models import Driver
-from .testdate import mydate
-from .serializers import DriverSerializer
+from .serializers import DriverSerializer, RouteNumberSerializer
 
 
 # Скорее всего сюда необходимо будет передавать список url CRUD
@@ -19,9 +23,27 @@ def getDrivers(request):
     return Response(serializer.data)
 
 
-@api_view(['GET'])
+@api_view(['GET', 'POST'])
 def getRoutes(request):
-    return Response(mydate)
+
+    # print(**request.data)
+    routes = RouteNumber.objects.all()
+
+    # print(RouteNumber.objects.filter(num_route=request.data).exists())
+    if request.method == 'GET':
+        serializer = RouteNumberSerializer(routes, many=True)
+        return Response(serializer.data)
+    elif request.method == 'POST':
+        serializer = RouteNumberSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        # Кривая реализация надо разбораться с валидаторами
+        elif RouteNumber.objects.filter(num_route=request.data['num_route']).exists():
+            return Response({'status': 403, 'message': 'Маршрут зарегистрирован в системе'})
+        return Response({'status': 403, 'message': 'Введено некорректное значение'})
+
+#
 
 
 @api_view(['GET'])

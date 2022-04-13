@@ -33,8 +33,10 @@ class RouteOrder(models.Model):
 class RouteNumber(models.Model):
     #    route_order = models.ForeignKey(
  #       RouteOrder, on_delete=models.SET_NULL, null=True,blank=True, default=000, verbose_name='Номер маршрута')
-    num_route = models.PositiveSmallIntegerField(
-        null=False, unique=True,  validators=[validators.MaxValueValidator(9999, 'Максимально допустимое значение номера маршрута 9999')], verbose_name='Номер маршрута')  # Проверить работает ли валидатор
+    num_route = models.PositiveIntegerField(
+        # Проверить работает ли валидатор
+        null=False, unique=True,   validators=[validators.MaxValueValidator(limit_value=999999, message='555')],
+        verbose_name='Номер маршрута')
     time_update = models.DateTimeField(auto_now=True, verbose_name='Изменён')
     time_create = models.DateTimeField(
         auto_now_add=True, verbose_name='Создан')
